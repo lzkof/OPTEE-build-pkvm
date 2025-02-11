@@ -535,7 +535,7 @@ QEMU_VIRT	= true
 else ifeq ($(SPMC_AT_EL),2)
 QEMU_VIRT	= true
 else
-QEMU_VIRT	= false
+QEMU_VIRT	= true
 endif
 
 ifeq ($(XEN_BOOT),y)
@@ -573,9 +573,10 @@ QEMU_BASE_ARGS += -cpu $(QEMU_CPU)
 QEMU_BASE_ARGS += -d unimp -semihosting-config enable=on,target=native
 QEMU_BASE_ARGS += -m $(QEMU_MEM)
 QEMU_BASE_ARGS += -bios bl1.bin
-QEMU_BASE_ARGS += -initrd rootfs.cpio.gz
+#QEMU_BASE_ARGS += -initrd rootfs.cpio.gz
+QEMU_BASE_ARGS += -drive file=/home/lorenz/qemu/debian-12-nocloud-arm64.raw,if=virtio
 QEMU_BASE_ARGS += -kernel Image
-QEMU_BASE_ARGS += -append 'console=ttyAMA0,38400 keep_bootcon root=/dev/vda2 $(QEMU_KERNEL_BOOTARGS)'
+QEMU_BASE_ARGS += -append 'console=ttyAMA0,38400 keep_bootcon $(QEMU_KERNEL_BOOTARGS)'
 QEMU_BASE_ARGS += $(QEMU_XEN)
 QEMU_BASE_ARGS += $(QEMU_EXTRA_ARGS)
 QEMU_BASE_ARGS += -machine virt,acpi=off,secure=on,mte=$(QEMU_MTE),gic-version=$(QEMU_GIC_VERSION),virtualization=$(QEMU_VIRT)
