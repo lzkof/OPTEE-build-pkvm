@@ -453,6 +453,8 @@ $(KERNEL_UIMAGE): u-boot linux | $(BINARIES_PATH)
 					-R .comment \
 					-S $(LINUX_PATH)/vmlinux \
 					$(BINARIES_PATH)/linux.bin
+					#-S /home/lorenz/qemu/linux/vmlinux \
+
 	$(MKIMAGE_PATH)/mkimage -A arm64 \
 				-O linux \
 				-T kernel \
@@ -473,7 +475,8 @@ $(ROOTFS_UGZ): u-boot buildroot | $(BINARIES_PATH)
 				-a $(ROOTFS_LOADADDR) \
 				-e $(ROOTFS_ENTRY) \
 				-n "Root file system" \
-				-d $(ROOTFS_GZ) $(ROOTFS_UGZ)
+				-d /home/lorenz/qemu/rootfs.cpio.gz $(ROOTFS_UGZ)
+				#-d $(ROOTFS_GZ) $(ROOTFS_UGZ)
 
 .PHONY: uRootfs
 uRootfs: $(ROOTFS_UGZ)
@@ -573,10 +576,10 @@ QEMU_BASE_ARGS += -cpu $(QEMU_CPU)
 QEMU_BASE_ARGS += -d unimp -semihosting-config enable=on,target=native
 QEMU_BASE_ARGS += -m $(QEMU_MEM)
 QEMU_BASE_ARGS += -bios bl1.bin
-#QEMU_BASE_ARGS += -initrd rootfs.cpio.gz
-QEMU_BASE_ARGS += -drive file=/home/lorenz/qemu/debian-12-nocloud-arm64.raw,if=virtio
+QEMU_BASE_ARGS += -initrd /home/lorenz/qemu/rootfs.cpio.gz
+#QEMU_BASE_ARGS += -drive file=/home/lorenz/qemu/debian-12-nocloud-arm64.raw,if=virtio
 QEMU_BASE_ARGS += -kernel Image
-QEMU_BASE_ARGS += -append 'console=ttyAMA0,38400 keep_bootcon $(QEMU_KERNEL_BOOTARGS)'
+QEMU_BASE_ARGS += -append 'console=ttyAMA0,38400 keep_bootcon root=/dev/vda2 $(QEMU_KERNEL_BOOTARGS)'
 QEMU_BASE_ARGS += $(QEMU_XEN)
 QEMU_BASE_ARGS += $(QEMU_EXTRA_ARGS)
 QEMU_BASE_ARGS += -machine virt,acpi=off,secure=on,mte=$(QEMU_MTE),gic-version=$(QEMU_GIC_VERSION),virtualization=$(QEMU_VIRT)
