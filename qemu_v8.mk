@@ -451,9 +451,13 @@ $(KERNEL_UIMAGE): u-boot linux | $(BINARIES_PATH)
 	${AARCH64_CROSS_COMPILE}objcopy -O binary \
 					-R .note \
 					-R .comment \
-					-S $(LINUX_PATH)/vmlinux \
+					-S /home/lorenz/kernel-sources/android-kvm/vmlinux \
 					$(BINARIES_PATH)/linux.bin
+
+					#-S /home/lorenz/kernel-sources/android-linux-1/vmlinux \
+					#-S /home/lorenz/android-linux/vmlinux \
 					#-S /home/lorenz/qemu/linux/vmlinux \
+					#-S $(LINUX_PATH)/vmlinux \
 
 	$(MKIMAGE_PATH)/mkimage -A arm64 \
 				-O linux \
@@ -475,8 +479,8 @@ $(ROOTFS_UGZ): u-boot buildroot | $(BINARIES_PATH)
 				-a $(ROOTFS_LOADADDR) \
 				-e $(ROOTFS_ENTRY) \
 				-n "Root file system" \
-				-d /home/lorenz/qemu/rootfs.cpio.gz $(ROOTFS_UGZ)
-				#-d $(ROOTFS_GZ) $(ROOTFS_UGZ)
+				-d $(ROOTFS_GZ) $(ROOTFS_UGZ)
+				#-d /home/lorenz/qemu/rootfs.cpio.gz $(ROOTFS_UGZ)
 
 .PHONY: uRootfs
 uRootfs: $(ROOTFS_UGZ)
@@ -545,10 +549,10 @@ ifeq ($(XEN_BOOT),y)
 QEMU_MEM 	?= 3072
 QEMU_SMP	?= 4
 QEMU_XEN	?= -drive if=none,file=$(XEN_EXT4),format=raw,id=hd1 \
-		   -device virtio-blk-device,drive=hd1
+		   -device virtio-blk-device,drive=hd1 
 else
 QEMU_SMP 	?= 2
-QEMU_MEM 	?= 1057
+QEMU_MEM 	?= 10240
 endif
 
 ifeq ($(XEN_BOOT),y)
@@ -576,14 +580,19 @@ QEMU_BASE_ARGS += -cpu $(QEMU_CPU)
 QEMU_BASE_ARGS += -d unimp -semihosting-config enable=on,target=native
 QEMU_BASE_ARGS += -m $(QEMU_MEM)
 QEMU_BASE_ARGS += -bios bl1.bin
-QEMU_BASE_ARGS += -initrd /home/lorenz/qemu/rootfs.cpio.gz
+QEMU_BASE_ARGS += -netdev type=user,hostfwd=tcp::5573-:22,id=net0 
+#QEMU_BASE_ARGS += -initrd /home/lorenz/qemu/rootfs.cpio.gz
+QEMU_BASE_ARGS += -initrd rootfs.cpio.gz
+QEMU_BASE_ARGS += -device virtio-blk-pci,drive=image,iommu_platform=true,disable-legacy=on
+QEMU_BASE_ARGS += -drive file=/home/lorenz/qemu/disk.img,format=qcow2,if=none,id=image
 #QEMU_BASE_ARGS += -drive file=/home/lorenz/qemu/debian-12-nocloud-arm64.raw,if=virtio
 QEMU_BASE_ARGS += -kernel Image
 QEMU_BASE_ARGS += -append 'console=ttyAMA0,38400 keep_bootcon root=/dev/vda2 $(QEMU_KERNEL_BOOTARGS)'
 QEMU_BASE_ARGS += $(QEMU_XEN)
 QEMU_BASE_ARGS += $(QEMU_EXTRA_ARGS)
-QEMU_BASE_ARGS += -machine virt,acpi=off,secure=on,mte=$(QEMU_MTE),gic-version=$(QEMU_GIC_VERSION),virtualization=$(QEMU_VIRT)
-
+QEMU_BASE_ARGS += -machine virt,acpi=off,secure=on,mte=$(QEMU_MTE),gic-version=$(QEMU_GIC_VERSION),virtualization=$(QEMU_VIRT) 
+QEMU_BASE_ARGS += -device virtio-iommu-pci
+ 
 ifeq ($(WITH_SCMI),y)
 QEMU_SCMI_ARGS 	= -dtb $(SCMI_DTB)
 
