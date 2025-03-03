@@ -451,13 +451,14 @@ $(KERNEL_UIMAGE): u-boot linux | $(BINARIES_PATH)
 	${AARCH64_CROSS_COMPILE}objcopy -O binary \
 					-R .note \
 					-R .comment \
-					-S /home/lorenz/pkvm-aarch64/linux-host/vmlinux \
+					-S $(LINUX_PATH)/vmlinux \
 					$(BINARIES_PATH)/linux.bin
 
-					#-S /home/lorenz/kernel-sources/android-linux-1/vmlinux \
+					#-S /home/lorenz/kernel-sources/android-common/vmlinux \
 					#-S /home/lorenz/kernel-sources/android-kvm/vmlinux \
+					#-S /home/lorenz/pkvm-aarch64/linux-host/vmlinux \
+					#-S /home/lorenz/kernel-sources/android-linux-1/vmlinux \
 					#-S /home/lorenz/qemu/linux/vmlinux \
-					#-S $(LINUX_PATH)/vmlinux \
 
 	$(MKIMAGE_PATH)/mkimage -A arm64 \
 				-O linux \
