@@ -1,0 +1,10 @@
+# Loopback interface
+auto lo
+iface lo inet loopback
+
+# Ethernet interface eth0 with static IP
+auto enp0s3
+iface enp0s3 inet static
+    address 192.168.7.2
+    netmask 255.255.255.0
+    gateway 192.168.7.1

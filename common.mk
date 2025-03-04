@@ -384,6 +384,7 @@ BR2_PACKAGE_IPROUTE2=y
 BR2_PACKAGE_PROCPS_NG=y
 BR2_PACKAGE_PROCPS_NG_SYSCTL=y
 BR2_PACKAGE_BUSYBOX=y
+BR2_PACKAGE_IFUPDOWN=y
 ifeq ($(XEN_BOOT),y)
 BR2_TARGET_GENERIC_GETTY_PORT ?= "console"
 else
@@ -515,7 +516,9 @@ HOSTFWD := ,hostfwd=tcp::12345-:12345
 endif
 # Enable QEMU SLiRP user networking
 QEMU_EXTRA_ARGS +=\
-	-netdev user,id=vmnic$(HOSTFWD),hostfwd=tcp::5573-:22 -device virtio-net-device,netdev=vmnic
+	-device e1000,netdev=net0 -netdev user,id=net0,host=192.168.7.1,net=192.168.7.0/24,restrict=off,hostname=guest,hostfwd=tcp:192.168.0.10:10022-192.168.7.2:22
+#
+#	-netdev user,id=vmnic$(HOSTFWD),hostfwd=tcp::5573-:22,restrict=off -device virtio-net-device,netdev=vmnic
 
 define run-help
 	@echo
