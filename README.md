@@ -11,3 +11,10 @@ specific information] at he new location for the OP-TEE documentation.
 
 [build]: https://optee.readthedocs.io/en/latest/building/index.html
 [Device specific information]: https://optee.readthedocs.io/en/latest/building/devices/index.html
+
+## Some note
+
+```bash
+make -B /home/lorenz/test-manifdest/build/../out/crosvm
+make -B /home/lorenz/test-manifdest/build/../out/disk.img
+```
