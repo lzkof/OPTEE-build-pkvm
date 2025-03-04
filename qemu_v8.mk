@@ -576,8 +576,6 @@ QEMU_MTE	= off
 endif
 
 
-#qemu-system-aarch64 --accel tcg,thread=multi -d guest_errors,unimp -D /home/lorenz/pkvm-aarch64/qemudebug.log -machine virt,virtualization=on,secure=off,gic-version=3 -cpu max,sve=off,lpa2=off -smp 4 -m 8G -device e1000,netdev=net0 -netdev user,id=net0,host=192.168.7.1,net=192.168.7.0/24,restrict=off,hostname=guest,hostfwd=tcp:192.168.0.10:10022-192.168.7.2:22 -device qemu-xhci -device usb-kbd -device usb-tablet -drive file=/home/lorenz/pkvm-aarch64/linux-host/../images/host/ubuntuhost.qcow2,if=none,format=qcow2,id=hd0 -device virtio-blk-device,drive=hd0 -kernel /home/lorenz/pkvm-aarch64/linux-host/arch/arm64/boot/Image -append kvm-arm.mode=protected root=/dev/vda1 console=ttyAMA0 mem=8G nokaslr loglevel=8 rw -nographic
-
 $(ROOT)/out/disk.img:
 	qemu-img create -f raw $(ROOT)/out/disk.img 10G
 	/usr/sbin/mke2fs -F $(ROOT)/out/disk.img
@@ -601,7 +599,6 @@ QEMU_BASE_ARGS += --accel tcg,thread=multi
 QEMU_BASE_ARGS += -d unimp -semihosting-config enable=on,target=native
 QEMU_BASE_ARGS += -m 10G
 QEMU_BASE_ARGS += -bios bl1.bin
-QEMU_BASE_ARGS += -netdev type=user,hostfwd=tcp::5573-:22,id=net0 
 #QEMU_BASE_ARGS += -initrd /home/lorenz/qemu/rootfs.cpio.gz
 QEMU_BASE_ARGS += -initrd rootfs.cpio.gz
 QEMU_BASE_ARGS += -device virtio-blk-pci,drive=image,iommu_platform=true,disable-legacy=on

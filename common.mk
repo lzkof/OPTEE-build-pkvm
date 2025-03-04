@@ -378,7 +378,7 @@ BR2_PACKAGE_LINUX_PAM=y
 #BR2_TOOLCHAIN_EXTERNAL=y
 #BR2_PACKAGE_GLIBC=y
 #BR2_PACKAGE_GLIBC_KERNEL_COMPAT=y
-#BR2_TARGET_GENERIC_ROOT_PASSWD="linux"
+BR2_TARGET_GENERIC_ROOT_PASSWD="linux"
 BR2_PACKAGE_MINIJAIL=y
 BR2_PACKAGE_IPROUTE2=y
 BR2_PACKAGE_PROCPS_NG=y
@@ -515,7 +515,7 @@ HOSTFWD := ,hostfwd=tcp::12345-:12345
 endif
 # Enable QEMU SLiRP user networking
 QEMU_EXTRA_ARGS +=\
-	-netdev user,id=vmnic$(HOSTFWD) -device virtio-net-device,netdev=vmnic,netdev=net0
+	-netdev user,id=vmnic$(HOSTFWD),hostfwd=tcp::5573-:22 -device virtio-net-device,netdev=vmnic
 
 define run-help
 	@echo
