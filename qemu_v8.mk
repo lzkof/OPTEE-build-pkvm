@@ -583,10 +583,12 @@ $(ROOT)/out/disk.img:
 	( \
 		echo "cd /"; \
 		echo "write \"$(ROOT)/build/pkvm-guest-drive/Image\" Image"; \
-		echo "write \"$(ROOT)/build/pkvm-guest-drive/debian-12-nocloud-amd64.raw\" debian-12-nocloud-amd64.raw"; \
+		echo "write \"$(ROOT)/build/pkvm-guest-drive/ubuntuguest.qcow2\" ubuntuguest.qcow2"; \
 		echo "write \"$(ROOT)/build/pkvm-guest-drive/run-crosvm.sh\" run-crosvm.sh"; \
 		echo "write \"$(ROOT)/out/crosvm\" crosvm"; \
 		) | /usr/sbin/debugfs -w $(ROOT)/out/disk.img
+	
+		#echo "write \"$(ROOT)/build/pkvm-guest-drive/debian-12-nocloud-amd64.raw\" debian-12-nocloud-amd64.raw"; \
 
 $(ROOT)/out/crosvm:
 	@echo "Please see ../build/crosvm-docker-builder/"
