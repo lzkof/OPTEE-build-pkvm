@@ -602,12 +602,12 @@ QEMU_BASE_ARGS += -d unimp -semihosting-config enable=on,target=native
 QEMU_BASE_ARGS += -m 10G
 QEMU_BASE_ARGS += -bios bl1.bin
 #QEMU_BASE_ARGS += -initrd /home/lorenz/qemu/rootfs.cpio.gz
-QEMU_BASE_ARGS += -initrd rootfs.cpio.gz
+#QEMU_BASE_ARGS += -initrd rootfs.cpio.gz
 QEMU_BASE_ARGS += -device virtio-blk-pci,drive=image,iommu_platform=true,disable-legacy=on
 QEMU_BASE_ARGS += -drive file=$(ROOT)/out/disk.img,format=raw,if=none,id=image
 #QEMU_BASE_ARGS += -drive file=/home/lorenz/qemu/debian-12-nocloud-arm64.raw,if=virtio
 QEMU_BASE_ARGS += -kernel Image
-QEMU_BASE_ARGS += -append 'console=ttyAMA0,38400 keep_bootcon nokaslr root=/dev/vda2 $(QEMU_KERNEL_BOOTARGS)'
+#QEMU_BASE_ARGS += -append 'console=ttyAMA0,38400 keep_bootcon nokaslr root=/dev/vda2 $(QEMU_KERNEL_BOOTARGS)'
 QEMU_BASE_ARGS += $(QEMU_XEN)
 QEMU_BASE_ARGS += $(QEMU_EXTRA_ARGS)
 QEMU_BASE_ARGS += -machine virt,acpi=off,secure=on,mte=$(QEMU_MTE),gic-version=$(QEMU_GIC_VERSION),virtualization=on
