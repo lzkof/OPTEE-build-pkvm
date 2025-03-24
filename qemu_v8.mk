@@ -472,8 +472,9 @@ $(KERNEL_UIMAGE): u-boot linux | $(BINARIES_PATH)
 .PHONY: uImage
 uImage: $(KERNEL_UIMAGE)
 
-$(ROOTFS_UGZ): u-boot buildroot | $(BINARIES_PATH)
-	ln -sf $(ROOT)/out-br/images/rootfs.cpio.gz $(BINARIES_PATH)
+$(ROOTFS_UGZ): u-boot | $(BINARIES_PATH)
+#	ln -sf $(ROOT)/out-br/images/rootfs.cpio.gz $(BINARIES_PATH)
+	ln -sf /home/lorenz/qemu/rootfs.cpio.gz $(BINARIES_PATH)
 	$(MKIMAGE_PATH)/mkimage -A arm64 \
 				-T ramdisk \
 				-C gzip \
@@ -601,17 +602,13 @@ QEMU_BASE_ARGS += --accel tcg,thread=multi
 QEMU_BASE_ARGS += -d unimp -semihosting-config enable=on,target=native
 QEMU_BASE_ARGS += -m 10G
 QEMU_BASE_ARGS += -bios bl1.bin
-#QEMU_BASE_ARGS += -initrd /home/lorenz/qemu/rootfs.cpio.gz
-#QEMU_BASE_ARGS += -initrd rootfs.cpio.gz
 QEMU_BASE_ARGS += -device virtio-blk-pci,drive=image,iommu_platform=true,disable-legacy=on
-QEMU_BASE_ARGS += -drive file=$(ROOT)/out/disk.img,format=raw,if=none,id=image
-#QEMU_BASE_ARGS += -drive file=/home/lorenz/qemu/debian-12-nocloud-arm64.raw,if=virtio
+QEMU_BASE_ARGS += -drive file=/home/lorenz/test-manifdest/build/debian-12-nocloud-arm64.raw,format=raw,if=none,id=image
+QEMU_BASE_ARGS += -drive file=$(ROOT)/out/disk.img,format=raw,if=virtio
 QEMU_BASE_ARGS += -kernel Image
-#QEMU_BASE_ARGS += -append 'console=ttyAMA0,38400 keep_bootcon nokaslr root=/dev/vda2 $(QEMU_KERNEL_BOOTARGS)'
 QEMU_BASE_ARGS += $(QEMU_XEN)
 QEMU_BASE_ARGS += $(QEMU_EXTRA_ARGS)
 QEMU_BASE_ARGS += -machine virt,acpi=off,secure=on,mte=$(QEMU_MTE),gic-version=$(QEMU_GIC_VERSION),virtualization=on
-#QEMU_BASE_ARGS += -device virtio-iommu-pci
  
 ifeq ($(WITH_SCMI),y)
 QEMU_SCMI_ARGS 	= -dtb $(SCMI_DTB)

@@ -516,9 +516,7 @@ HOSTFWD := ,hostfwd=tcp::12345-:12345
 endif
 # Enable QEMU SLiRP user networking
 QEMU_EXTRA_ARGS +=\
-	-device e1000,netdev=net0 -netdev user,id=net0,host=192.168.7.1,net=192.168.7.0/24,restrict=off,hostname=guest,hostfwd=tcp:127.0.0.1:10022-192.168.7.2:22
-#
-#	-netdev user,id=vmnic$(HOSTFWD),hostfwd=tcp::5573-:22,restrict=off -device virtio-net-device,netdev=vmnic
+	-netdev type=user,hostfwd=tcp::5573-:22,id=net0 -device virtio-net,netdev=net0
 
 define run-help
 	@echo
